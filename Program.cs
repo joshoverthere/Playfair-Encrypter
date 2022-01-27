@@ -1,2 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+
+namespace Playfair
+{
+    public class Program
+    {
+
+        static string[,] createGrid(string key)
+        {
+            List<string> lettersUsed = new List<string>();
+            string[,] grid = new string[5,5];
+            return grid;
+        }
+        static void Main(string[] args)
+        {
+
+        }
+    }
+}
