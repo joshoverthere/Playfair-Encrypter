@@ -23,6 +23,7 @@ namespace Playfair
             {
                 for (int a = 0; a < 5; a++)
                 {
+                    //Console.WriteLine("[" + i + "," + a + "]");
                     bool letterFound = false;
                     string nextLetter = "";
 
@@ -82,22 +83,19 @@ namespace Playfair
             //properly format message
             message = message.ToLower();
             message = message.Replace(" ", "");
+            if (message.Length % 2 != 0)
+            {
+                message += "q";
+            }
 
-            
 
             //remove 2 letters of the message at a time and add those two letters into the digrams list until the message is gone
             while (message.Length > 0)
             {
-                //if message is an odd length, add an x 
-                if (message.Length % 2 != 0)
-                {
-                    message += "q";
-                }
-
                 string digram = message.Substring(0, 2);
                 
 
-                //if the two letters are the same make the second to be an x
+                //if the two letters are the same make the second to be a q 
                 if (digram.Substring(0, 1) == digram.Substring(1, 1))
                 {
                     digram = digram.Substring(0, 1) + "q";
@@ -211,30 +209,31 @@ namespace Playfair
             return encodedDigram;
         }
 
-
-
         static void Main(string[] args)
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Welcome to Playfair Encrypter!");
 
                 //read message and encryption key
                 Console.Write("\nMessage:");
                 string message = Console.ReadLine();
+                
                 Console.Write("Key:");
                 string key = Console.ReadLine();
 
                 //generate key grid
                 string[,] grid = createGrid(message, key);
+                Console.WriteLine("---Generated key grid.---");
 
                 //get list of digrams
                 List<string> digrams = new List<string>();
                 digrams = splitDigrams(message);
+                Console.WriteLine("---Split digrams.---");
 
                 //encode each digram
                 string encodedMessage = "";
+                Console.WriteLine("---Encoding digrams...---");
                 foreach (string digram in digrams)
                 {
                     string encodedDigram = encodeDigram(digram, grid);
@@ -242,8 +241,6 @@ namespace Playfair
                 }
 
                 Console.WriteLine("Encoded message: " + encodedMessage);
-
-                
 
                 //wait
                 Console.ReadLine();
