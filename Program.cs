@@ -94,6 +94,12 @@ namespace Playfair
             {
                 string digram = message.Substring(0, 2);
                 message = message.Remove(0, 2);
+
+                //if the two letters are the same make the second to be an x
+                if (digram.Substring(0, 1) == digram.Substring(1, 1))
+                {
+                    digram = digram.Substring(0, 1) + "x";
+                }
                 digrams.Add(digram);
             }
 
@@ -120,6 +126,7 @@ namespace Playfair
                 digrams = splitDigrams(message);
 
 
+                //wait
                 Console.ReadLine();
             }
         }
