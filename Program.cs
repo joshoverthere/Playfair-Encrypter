@@ -153,7 +153,7 @@ namespace Playfair
                 }
 
                 Console.WriteLine("letter 2");
-                //replace letter 2 with letter to its right
+                //replace letter 2 with letter to its right (if its on the end, wrap around)
                 if (coordsLetter2[1] == 4)
                 {
                     Console.WriteLine("its on the end");
@@ -162,6 +162,33 @@ namespace Playfair
                 else
                 {
                     encodedDigram += grid[coordsLetter2[0], coordsLetter2[1] + 1];
+                }
+            }
+
+            //"If the letters appear on the same column of your table, replace them with the letters immediately below respectively
+            //(wrapping around to the top side of the column if a letter in the original pair was on the bottom side of the column)."
+            if (coordsLetter1[1] == coordsLetter2[1])
+            {
+                //replace letter1 with letter below it (if letter is on bottom, wrap around)
+                if (coordsLetter1[0] == 4)
+                {
+                    Console.WriteLine("its at the bottom");
+                    encodedDigram += grid[0, coordsLetter1[1]];
+                }
+                else
+                {
+                    encodedDigram += grid[coordsLetter1[0] + 1, coordsLetter1[1]];
+                }
+
+                //replace letter2 with letter below it (if letter is on bottom, wrap around) 
+                if (coordsLetter2[0] == 4)
+                {
+                    Console.WriteLine("its at the bottom");
+                    encodedDigram += grid[0, coordsLetter2[1]];
+                }
+                else
+                {
+                    encodedDigram += grid[coordsLetter2[0] + 1, coordsLetter2[1]];
                 }
             }
 
