@@ -83,22 +83,29 @@ namespace Playfair
             message = message.ToLower();
             message = message.Replace(" ", "");
 
-            //if message is an odd length, add an x 
-            if (message.Length % 2 != 0)
-            {
-                message += "x";
-            }
+            
 
             //remove 2 letters of the message at a time and add those two letters into the digrams list until the message is gone
             while (message.Length > 0)
             {
+                //if message is an odd length, add an x 
+                if (message.Length % 2 != 0)
+                {
+                    message += "q";
+                }
+
                 string digram = message.Substring(0, 2);
-                message = message.Remove(0, 2);
+                
 
                 //if the two letters are the same make the second to be an x
                 if (digram.Substring(0, 1) == digram.Substring(1, 1))
                 {
                     digram = digram.Substring(0, 1) + "q";
+                    message = message.Remove(0, 1);
+                }
+                else
+                {
+                    message = message.Remove(0, 2);
                 }
                 digrams.Add(digram);
             }
@@ -130,7 +137,7 @@ namespace Playfair
         static string encodeDigram(string digram, string[,] grid)
         {
             string encodedDigram = "";
-            Console.WriteLine("Encoding digram: " + digram.Substring(0,1) + digram.Substring(1,1));
+            //Console.WriteLine("Encoding digram: " + digram.Substring(0,1) + digram.Substring(1,1));
             List<int> coordsLetter1 = new List<int>();
             coordsLetter1 = getCoordinates(digram.Substring(0,1), grid);
             List<int> coordsLetter2 = new List<int>();
@@ -140,8 +147,8 @@ namespace Playfair
             //(wrapping around to the left side of the row if a letter in the original pair was on the right side of the row)."
             if (coordsLetter1[0] == coordsLetter2[0])
             {
-                Console.WriteLine("they're on the same row");
-                Console.WriteLine("letter 1");
+                //Console.WriteLine("they're on the same row");
+                //Console.WriteLine("letter 1");
                 //replace letter 1 with letter to its right (if its on the end, wrap around)
                 if (coordsLetter1[1] == 4)
                 {
@@ -152,11 +159,11 @@ namespace Playfair
                     encodedDigram += grid[coordsLetter1[0], coordsLetter1[1] + 1];
                 }
 
-                Console.WriteLine("letter 2");
+                //Console.WriteLine("letter 2");
                 //replace letter 2 with letter to its right (if its on the end, wrap around)
                 if (coordsLetter2[1] == 4)
                 {
-                    Console.WriteLine("its on the end");
+                    //Console.WriteLine("its on the end");
                     encodedDigram += grid[coordsLetter2[0], 0];
                 }
                 else
@@ -171,7 +178,7 @@ namespace Playfair
                 //replace letter1 with letter below it (if letter is on bottom, wrap around)
                 if (coordsLetter1[0] == 4)
                 {
-                    Console.WriteLine("its at the bottom");
+                    //Console.WriteLine("its at the bottom");
                     encodedDigram += grid[0, coordsLetter1[1]];
                 }
                 else
@@ -182,7 +189,7 @@ namespace Playfair
                 //replace letter2 with letter below it (if letter is on bottom, wrap around) 
                 if (coordsLetter2[0] == 4)
                 {
-                    Console.WriteLine("its at the bottom");
+                    //Console.WriteLine("its at the bottom");
                     encodedDigram += grid[0, coordsLetter2[1]];
                 }
                 else
@@ -199,7 +206,7 @@ namespace Playfair
                 encodedDigram += grid[coordsLetter2[0], coordsLetter1[1]];
             }
 
-            Console.WriteLine(encodedDigram);
+            //Console.WriteLine(encodedDigram);
 
             return encodedDigram;
         }
@@ -214,9 +221,9 @@ namespace Playfair
                 Console.WriteLine("Welcome to Playfair Encrypter!");
 
                 //read message and encryption key
-                Console.WriteLine("\nPlease enter your message to encrypt:");
+                Console.Write("\nMessage:");
                 string message = Console.ReadLine();
-                Console.WriteLine("\nPlease enter the encryption key:");
+                Console.Write("Key:");
                 string key = Console.ReadLine();
 
                 //generate key grid
@@ -234,7 +241,7 @@ namespace Playfair
                     encodedMessage += encodedDigram;
                 }
 
-                Console.WriteLine(encodedMessage);
+                Console.WriteLine("Encoded message: " + encodedMessage);
 
                 
 
