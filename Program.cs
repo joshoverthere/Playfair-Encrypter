@@ -164,10 +164,9 @@ namespace Playfair
                     encodedDigram += grid[coordsLetter2[0], coordsLetter2[1] + 1];
                 }
             }
-
             //"If the letters appear on the same column of your table, replace them with the letters immediately below respectively
             //(wrapping around to the top side of the column if a letter in the original pair was on the bottom side of the column)."
-            if (coordsLetter1[1] == coordsLetter2[1])
+            else if(coordsLetter1[1] == coordsLetter2[1])
             {
                 //replace letter1 with letter below it (if letter is on bottom, wrap around)
                 if (coordsLetter1[0] == 4)
@@ -191,10 +190,18 @@ namespace Playfair
                     encodedDigram += grid[coordsLetter2[0] + 1, coordsLetter2[1]];
                 }
             }
+            else
+            {
+                //replace letter 1 with letter on the same row but in the column of letter2
+                encodedDigram += grid[coordsLetter1[0], coordsLetter2[1]];
+
+                //replace letter 2 with letter on the same row but in the column of letter1
+                encodedDigram += grid[coordsLetter2[0], coordsLetter1[1]];
+            }
 
             Console.WriteLine(encodedDigram);
 
-            return "banana";
+            return encodedDigram;
         }
 
 
@@ -219,15 +226,17 @@ namespace Playfair
                 List<string> digrams = new List<string>();
                 digrams = splitDigrams(message);
 
-                //create list of encoded digrams
-                List<string> encodedDigrams = new List<string>();
-
                 //encode each digram
+                string encodedMessage = "";
                 foreach (string digram in digrams)
                 {
                     string encodedDigram = encodeDigram(digram, grid);
-                    encodedDigrams.Add(encodedDigram);
+                    encodedMessage += encodedDigram;
                 }
+
+                Console.WriteLine(encodedMessage);
+
+                
 
                 //wait
                 Console.ReadLine();
