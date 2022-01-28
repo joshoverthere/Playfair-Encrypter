@@ -33,11 +33,11 @@ namespace Playfair
                         letterFound = true;
 
                         //if there are still parts of the message that haven't been added to the grid yet
-                        if (message.Length > 0)
+                        if (key.Length > 0)
                         {
                             //take the first letter of the message (and remove it for future cycles)
-                            nextLetter = message.Substring(0, 1);
-                            message = message.Remove(0, 1);
+                            nextLetter = key.Substring(0, 1);
+                            key = key.Remove(0, 1);
 
                             //if that letter is already in the grid then the letter is invalid, if not then add that letter to the list of used letters
                             if (lettersUsed.Contains(nextLetter))
@@ -98,13 +98,80 @@ namespace Playfair
                 //if the two letters are the same make the second to be an x
                 if (digram.Substring(0, 1) == digram.Substring(1, 1))
                 {
-                    digram = digram.Substring(0, 1) + "x";
+                    digram = digram.Substring(0, 1) + "q";
                 }
                 digrams.Add(digram);
             }
 
             return digrams;
         }
+
+        static List<int> getCoordinates(string letter, string[,] grid)
+        {
+            List<int> coordinates = new List<int>();
+
+            //loop through rows and columns
+            for (int i = 0; i < 5; i++)
+            {
+                for (int a = 0; a < 5; a++)
+                {
+                    if (grid[i,a] == letter)
+                    {
+                        coordinates.Add(i);
+                        coordinates.Add(a);
+                    }
+                }
+            }
+
+            return coordinates;
+
+        }
+
+        static string encodeDigram(string digram, string[,] grid)
+        {
+            string encodedDigram = "";
+            Console.WriteLine("Encoding digram: " + digram.Substring(0,1) + digram.Substring(1,1));
+            List<int> coordsLetter1 = new List<int>();
+            coordsLetter1 = getCoordinates(digram.Substring(0,1), grid);
+            List<int> coordsLetter2 = new List<int>();
+            coordsLetter2 = getCoordinates(digram.Substring(1,1), grid);
+
+            //"If the letters appear on the same row of your table, replace them with the letters to their immediate right respectively
+            //(wrapping around to the left side of the row if a letter in the original pair was on the right side of the row)."
+            if (coordsLetter1[0] == coordsLetter2[0])
+            {
+                Console.WriteLine("they're on the same row");
+                Console.WriteLine("letter 1");
+                //replace letter 1 with letter to its right (if its on the end, wrap around)
+                if (coordsLetter1[1] == 4)
+                {
+                    encodedDigram += grid[coordsLetter1[0], 0];
+                }
+                else
+                {
+                    encodedDigram += grid[coordsLetter1[0], coordsLetter1[1] + 1];
+                }
+
+                Console.WriteLine("letter 2");
+                //replace letter 2 with letter to its right
+                if (coordsLetter2[1] == 4)
+                {
+                    Console.WriteLine("its on the end");
+                    encodedDigram += grid[coordsLetter2[0], 0];
+                }
+                else
+                {
+                    encodedDigram += grid[coordsLetter2[0], coordsLetter2[1] + 1];
+                }
+            }
+
+            Console.WriteLine(encodedDigram);
+
+            return "banana";
+        }
+
+
+
         static void Main(string[] args)
         {
             while (true)
@@ -125,6 +192,15 @@ namespace Playfair
                 List<string> digrams = new List<string>();
                 digrams = splitDigrams(message);
 
+                //create list of encoded digrams
+                List<string> encodedDigrams = new List<string>();
+
+                //encode each digram
+                foreach (string digram in digrams)
+                {
+                    string encodedDigram = encodeDigram(digram, grid);
+                    encodedDigrams.Add(encodedDigram);
+                }
 
                 //wait
                 Console.ReadLine();
