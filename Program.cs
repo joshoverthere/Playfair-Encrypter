@@ -69,12 +69,35 @@ namespace Playfair
                     }
 
                     //assign letter to grid
-                    grid[i,a] = nextLetter;
-                    Console.WriteLine(nextLetter);
-                    
+                    grid[i,a] = nextLetter;    
                 }
             }
             return grid;
+        }
+
+        static List<string> splitDigrams(string message)
+        {
+            List<string> digrams = new List<string>();
+
+            //properly format message
+            message = message.ToLower();
+            message = message.Replace(" ", "");
+
+            //if message is an odd length, add an x 
+            if (message.Length % 2 != 0)
+            {
+                message += "x";
+            }
+
+            //remove 2 letters of the message at a time and add those two letters into the digrams list until the message is gone
+            while (message.Length > 0)
+            {
+                string digram = message.Substring(0, 2);
+                message = message.Remove(0, 2);
+                digrams.Add(digram);
+            }
+
+            return digrams;
         }
         static void Main(string[] args)
         {
@@ -82,11 +105,21 @@ namespace Playfair
             {
                 Console.Clear();
                 Console.WriteLine("Welcome to Playfair Encrypter!");
+
+                //read message and encryption key
                 Console.WriteLine("\nPlease enter your message to encrypt:");
                 string message = Console.ReadLine();
                 Console.WriteLine("\nPlease enter the encryption key:");
                 string key = Console.ReadLine();
+
+                //generate key grid
                 string[,] grid = createGrid(message, key);
+
+                //get list of digrams
+                List<string> digrams = new List<string>();
+                digrams = splitDigrams(message);
+
+
                 Console.ReadLine();
             }
         }
