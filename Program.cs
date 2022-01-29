@@ -99,10 +99,19 @@ namespace Playfair
                 if (digram.Substring(0, 1) == digram.Substring(1, 1))
                 {
                     digram = digram.Substring(0, 1) + "q";
+                    //and only remove one letter from the message (next letter to be used in another digram)
                     message = message.Remove(0, 1);
+
+                    //if the message length has been made odd by the previous step, add a q to make it even
+                    if (message.Length % 2 != 0)
+                    {
+                        message += "q";
+                    }
+                    
                 }
                 else
                 {
+                    //remove the digram from the message
                     message = message.Remove(0, 2);
                 }
                 digrams.Add(digram);
@@ -113,6 +122,7 @@ namespace Playfair
 
         static List<int> getCoordinates(string letter, string[,] grid)
         {
+            //create return list for the coords
             List<int> coordinates = new List<int>();
 
             //loop through rows and columns
@@ -120,6 +130,7 @@ namespace Playfair
             {
                 for (int a = 0; a < 5; a++)
                 {
+                    //if letter in coordinate equals letter searching for
                     if (grid[i,a] == letter)
                     {
                         coordinates.Add(i);
@@ -223,21 +234,26 @@ namespace Playfair
                 string key = Console.ReadLine();
 
                 //generate key grid
-                string[,] grid = createGrid(message, key);
-                Console.WriteLine("---Generated key grid.---");
+                    string[,] grid = createGrid(message, key);
+                    Console.WriteLine("---Generated key grid.---");
 
                 //get list of digrams
-                List<string> digrams = new List<string>();
-                digrams = splitDigrams(message);
-                Console.WriteLine("---Split digrams.---");
+                    List<string> digrams = new List<string>();
+                    digrams = splitDigrams(message);
+                    Console.WriteLine("---Split digrams.---");
 
                 //encode each digram
                 string encodedMessage = "";
                 Console.WriteLine("---Encoding digrams...---");
                 foreach (string digram in digrams)
                 {
-                    string encodedDigram = encodeDigram(digram, grid);
-                    encodedMessage += encodedDigram;
+                    try
+                    {
+                        string encodedDigram = encodeDigram(digram, grid);
+                        encodedMessage += encodedDigram;
+                    }
+                    catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                        
                 }
 
                 Console.WriteLine("Encoded message: " + encodedMessage);
